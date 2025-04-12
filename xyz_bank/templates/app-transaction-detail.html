@@ -1,0 +1,172 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Barclays Bank</title>
+    <meta name="description" content="Transaction Details">
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}" sizes="32x32">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body class="bg-white">
+    <!-- Loader -->
+    <div id="loader">
+        <img src="{% static 'img/loading-icon.png' %}" alt="loading" class="loading-icon">
+    </div>
+    
+    <!-- App Header -->
+    <div class="appHeader">
+        <div class="left">
+            <a href="{% url 'dashboard' %}" class="headerButton">
+                <ion-icon name="chevron-back-outline"></ion-icon>
+            </a>
+        </div>
+        <div class="pageTitle">
+            Transaction Detail
+        </div>
+        <div class="right">
+            <a href="#" class="headerButton" data-bs-toggle="modal" data-bs-target="#DialogBasic">
+                <ion-icon name="trash-outline"></ion-icon>
+            </a>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade dialogbox" id="DialogBasic" data-bs-backdrop="static" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Transaction</h5>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this transaction?
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-inline">
+                        <a href="#" class="btn btn-text-secondary" data-bs-dismiss="modal">Cancel</a>
+                        <a href="#" class="btn btn-text-primary">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction Details -->
+     
+    <div id="appCapsule" class="full-height">
+        <div class="section mt-2 mb-2">
+            <div class="listed-detail mt-3">
+                <div class="icon-wrapper">
+                    <div class="iconbox">
+                        {% if transaction.transaction_type == 'deposit' %}
+                            <ion-icon name="arrow-down-outline"></ion-icon>
+                        {% elif transaction.transaction_type == 'withdrawal' %}
+                            <ion-icon name="arrow-up-outline"></ion-icon>
+                        {% else %}
+                            <ion-icon name="swap-horizontal-outline"></ion-icon>
+                        {% endif %}
+                    </div>
+                </div>
+                <h3 class="text-center mt-2">
+                    {% if transaction.transaction_type == 'deposit' %}
+                        Deposit Received
+                    {% elif transaction.transaction_type == 'withdrawal' %}
+                        Withdrawal
+                    {% else %}
+                        Transfer Sent
+                    {% endif %}
+                </h3>
+            </div>
+
+            <ul class="listview flush transparent simple-listview no-space mt-3">
+                <li>
+                    <strong>Status</strong>
+                    <span class="text-success">{{ transaction.status }}</span>
+                </li>
+                <li>
+                    <strong>Transaction ID</strong>
+                    <span>{{ transaction.id }}</span>
+                </li>
+                {% if transaction.receiver %}
+                <li>
+                    <strong>To</strong>
+                    <span>{{ transaction.receiver.name }}</span>
+                </li>
+                {% endif %}
+                {% if transaction.sender %}
+                <li>
+                    <strong>From</strong>
+                    <span>{{ transaction.sender.name }}</span>
+                </li>
+                {% endif %}
+                <li>
+                    <strong>Bank Name</strong>
+                    <span>XYZ Bank</span>
+                </li>
+                <li>
+                    <strong>Category</strong>
+                    <span>{{ transaction.category }}</span>
+                </li>
+                <li>
+                    <strong>Receipt</strong>
+                    <span>{% if transaction.receipt %} Yes {% else %} No {% endif %}</span>
+                </li>
+                <li>
+                    <strong>Date</strong>
+                    <span>{{ transaction.timestamp|date:"M d, Y h:i A" }}</span>
+                </li>
+                <li>
+                    <strong>Amount</strong>
+                    <h3 class="m-0">$ {{ transaction.amount }}</h3>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="appBottomMenu">
+        <a href="{% url 'dashboard' %}" class="item">
+            <div class="col">
+                <ion-icon name="pie-chart-outline"></ion-icon>
+                <strong>Overview</strong>
+            </div>
+        </a>
+        <a href="#" class="item">
+            <div class="col">
+                <ion-icon name="document-text-outline"></ion-icon>
+                <strong>Transactions</strong>
+            </div>
+        </a>
+        <a href="#" class="item">
+            <div class="col">
+                <ion-icon name="card-outline"></ion-icon>
+                <strong>My Cards</strong>
+            </div>
+        </a>
+        <a href="#" class="item">
+            <div class="col">
+                <ion-icon name="settings-outline"></ion-icon>
+                <strong>Settings</strong>
+            </div>
+        </a>
+    </div>
+
+    <!-- ========= JS Files =========  -->
+    <!-- Bootstrap -->
+    <script src="{% static 'js/lib/bootstrap.bundle.min.js' %}"></script>
+    <!-- Ionicons -->
+    <script type="module" crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <!-- Splide -->
+    <script src="{% static 'js/plugins/splide/splide.min.js' %}"></script>
+    <!-- Base Js File -->
+    <script src="{% static 'js/base.js' %}"></script>
+</body>
+</html>

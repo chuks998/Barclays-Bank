@@ -1,0 +1,10 @@
+<form action="{% url 'set_currency' %}" method="post">
+    {% csrf_token %}
+    <select name="currency">
+        <option value="USD">USD ($)</option>
+        <option value="EUR">EUR (€)</option>
+        <option value="GBP">GBP (£)</option>
+        <option value="NGN">NGN (₦)</option>
+    </select>
+    <button type="submit">{% trans "Set Currency" %}</button>
+</form>

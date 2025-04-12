@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+    <title>Error</title>
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}" sizes="32x32">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/icon/192x192.png' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="bg-white">
+
+    <!-- App Header -->
+    <div class="appHeader no-border">
+        <div class="left">
+            <a href="{% url 'dashboard' %}" class="headerButton goBack">
+                <ion-icon name="chevron-back-outline"></ion-icon>
+            </a>
+        </div>
+        <div class="pageTitle text-danger">
+            Error
+        </div>
+        <div class="right"></div>
+    </div>
+    <!-- * App Header -->
+
+    <!-- App Capsule -->
+    <div id="appCapsule">
+        <div class="section">
+            <div class="splash-page mt-5 mb-5 text-center">
+                <ion-icon name="warning-outline" style="font-size: 100px; color: #ff4d4d;"></ion-icon>
+                <h1>Error</h1>
+                <h2 class="mb-2">{{ message }}</h2>
+                <p>Something went wrong. Please try again later.</p>
+            </div>
+        </div>
+
+        <div class="fixed-bar">
+            <div class="row">
+                <div class="col-6">
+                    <a href="#" class="btn btn-lg btn-outline-secondary btn-block goBack">Go Back</a>
+                </div>
+                <div class="col-6">
+                    <a href="{% url 'dashboard' %}" class="btn btn-lg btn-primary btn-block">Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- * App Capsule -->
+
+    <!-- ========= JS Files ========= -->
+    <script src="{% static 'js/lib/bootstrap.bundle.min.js' %}"></script>
+    <script type="module" crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="{% static 'js/base.js' %}"></script>
+</body>
+</html>

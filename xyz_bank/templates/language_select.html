@@ -1,0 +1,11 @@
+{% load i18n %}
+<form action="{% url 'set_language' %}" method="post">
+    {% csrf_token %}
+    <select name="language">
+        <option value="en">{% trans "English" %}</option>
+        <option value="fr">{% trans "French" %}</option>
+        <option value="es">{% trans "Spanish" %}</option>
+        <option value="de">{% trans "German" %}</option>
+    </select>
+    <button type="submit">{% trans "Change Language" %}</button>
+</form>

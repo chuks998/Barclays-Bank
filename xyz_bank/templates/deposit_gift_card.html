@@ -1,0 +1,72 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <title>Gift Card Deposit</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- App Header -->
+    <div class="appHeader no-border transparent position-absolute">
+        <div class="left">
+            <a href="{% url 'dashboard' %}" class="headerButton goBack">
+                <ion-icon name="chevron-back-outline"></ion-icon>
+            </a>
+        </div>
+        <div class="pageTitle">Deposit</div>
+        <div class="right"></div>
+    </div>
+
+    <!-- App Capsule -->
+    <div id="appCapsule">
+        <div class="section mt-2 text-center">
+            <h1>Deposit via Gift Card</h1>
+            <h4>Fill in the details below</h4>
+        </div>
+        <div class="section mb-5 p-2">
+            <form method="post" action="{% url 'deposit_gift_card' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card">
+                    <div class="card-body pb-1">
+                        <div class="form-group basic">
+                            <div class="input-wrapper">
+                                <label class="label" for="cardname">Card Name</label>
+                                <input type="text" name="cardname" id="cardname" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group basic">
+                            <div class="input-wrapper">
+                                <label class="label" for="amount">Enter Amount</label>
+                                <input type="number" name="amount" id="amount" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group basic">
+                            <div class="input-wrapper">
+                                <label class="label" for="cardimage">Upload Card Image</label>
+                                <!-- Custom file drop zone -->
+                                <div class="custom-file-dropzone" onclick="document.getElementById('cardimage').click()" style="border: 2px dashed #ccc; padding: 20px; text-align: center; cursor: pointer;">
+                                    <ion-icon name="image-outline" style="font-size: 24px;"></ion-icon>
+                                    <br>
+                                    <span id="fileName">Drag & drop image here or click to select</span>
+                                </div>
+                                <!-- Hidden file input -->
+                                <input type="file" name="cardimage" id="cardimage" class="form-control" required style="display: none;" onchange="document.getElementById('fileName').innerText = this.files[0]?.name || 'Drag & drop image here or click to select'">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-button-group transparent">
+                    <button type="submit" class="btn btn-primary btn-block btn-lg">Deposit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JS Files -->
+    <script src="{% static 'js/lib/bootstrap.bundle.min.js' %}"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="{% static 'js/plugins/splide/splide.min.js' %}"></script>
+</body>
+</html>

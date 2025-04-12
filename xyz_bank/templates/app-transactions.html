@@ -1,0 +1,162 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+    <title>Barclays Bank</title>
+    <meta name="description" content="Finapp HTML Mobile Template">
+    <meta name="keywords" content="bootstrap, wallet, banking, fintech mobile template, cordova, phonegap, mobile, html, responsive" />
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}" sizes="32x32">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/icon/192x192.png' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <!-- loader -->
+    <div id="loader">
+        <img src="{% static 'img/loading-icon.png' %}" alt="icon" class="loading-icon">
+    </div>
+    <!-- * loader -->
+
+    <!-- App Header -->
+    <div class="appHeader">
+        <div class="left">
+            <a href="{% url 'dashboard' %}" class="headerButton goBack">
+                <ion-icon name="chevron-back-outline"></ion-icon>
+            </a>
+        </div>
+        <div class="pageTitle">Transactions</div>
+        <div class="right">
+            <a href="app-notifications.html" class="headerButton">
+                <ion-icon class="icon" name="notifications-outline"></ion-icon>
+                <span class="badge badge-danger">4</span>
+            </a>
+        </div>
+    </div>
+    <!-- * App Header -->
+
+    <!-- App Capsule -->
+    <div id="appCapsule">
+        <!-- Transactions -->
+        <div class="section mt-4">
+            <div class="section-heading">
+                <h2 class="title">Transactions</h2>
+            </div>
+            <div class="transactions" id="transactionContainer">
+                {% regroup transactions by transaction_date as grouped_transactions %}
+                {% for group in grouped_transactions %}
+                    <h4 class="text-muted">{{ group.grouper }}</h4>
+                    {% for transaction in group.list %}
+                        <a href="{% url 'transaction_detail' transaction.id %}" class="item">
+                            <div class="detail">
+                                {% if transaction.transaction_type == "Transfer" %}
+                                    {% if transaction.sender == request.user %}
+                                        <img src="{{ request.user.profile_picture.url }}" alt="img" class="image-block imaged w48">
+                                        <div>
+                                            <strong>Transfer Sent</strong>
+                                            <p>To {{ transaction.receiver.name }}</p>
+                                        </div>
+                                    {% else %}
+                                        <img src="{{ transaction.sender.profile_picture.url }}" alt="img" class="image-block imaged w48">
+                                        <div>
+                                            <strong>{{ transaction.sender.name }}</strong>
+                                            <p>Transfer Received</p>
+                                        </div>
+                                    {% endif %}
+                                {% elif transaction.transaction_type == "Withdrawal" %}
+                                    <img src="{{ request.user.profile_picture.url }}" alt="img" class="image-block imaged w48">
+                                    <div>
+                                        <strong>Withdrawal</strong>
+                                        <p>Funds Withdrawal</p>
+                                    </div>
+                                {% elif transaction.transaction_type == "Deposit" %}
+                                    <img src="{{ request.user.profile_picture.url }}" alt="img" class="image-block imaged w48">
+                                    <div>
+                                        <strong>Deposit</strong>
+                                        <p>Funds Added</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="right">
+                                {% if transaction.sender == request.user %}
+                                    <div class="price text-danger">- ${{ transaction.amount }}</div>
+                                {% else %}
+                                    <div class="price text-success">+ ${{ transaction.amount }}</div>
+                                {% endif %}
+                            </div>
+                        </a>
+                    {% endfor %}
+                {% empty %}
+                    <p>No transactions available.</p>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- * Transactions -->
+
+        <div class="section mt-2 mb-2">
+            <a href="#" id="loadMoreBtn" class="btn btn-primary btn-block btn-lg">Load More</a>
+        </div>
+    </div>
+    <!-- * App Capsule -->
+
+    <!-- App Bottom Menu -->
+    <div class="appBottomMenu">
+        <a href="{% url 'dashboard' %}" class="item">
+            <div class="col">
+                <ion-icon name="home-outline"></ion-icon>
+                <strong>Dashboard</strong>
+            </div>
+        </a>
+        <a href="{% url 'transaction_history' %}" class="item active">
+            <div class="col">
+                <ion-icon name="swap-horizontal-outline"></ion-icon>
+                <strong>Transactions</strong>
+            </div>
+        </a>
+        
+        <a href="#" class="item">
+            <div class="col">
+                <ion-icon name="card-outline"></ion-icon>
+                <strong>My Cards</strong>
+            </div>
+        </a>
+        <a href="{% url 'settings' %}" class="item">
+            <div class="col">
+                <ion-icon name="settings-outline"></ion-icon>
+                <strong>Settings</strong>
+            </div>
+        </a>
+    </div>
+    <!-- * App Bottom Menu -->
+
+    <!-- ========= JS Files =========  -->
+    <!-- Bootstrap -->
+    <script src="{% static 'js/lib/bootstrap.bundle.min.js' %}"></script>
+    <!-- Ionicons -->
+    <script type="module" crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <!-- Splide -->
+    <script src="{% static 'js/plugins/splide/splide.min.js' %}"></script>
+    <!-- Base Js File -->
+    <script src="{% static 'js/base.js' %}"></script>
+
+    <!-- JS for pagination -->
+    <script>
+        let page = 1;
+        document.getElementById("loadMoreBtn").addEventListener("click", function(e) {
+            e.preventDefault();
+            page++;
+            fetch(`?page=${page}`)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById("transactionContainer").insertAdjacentHTML('beforeend', html);
+                })
+                .catch(error => console.error('Error loading more transactions:', error));
+        });
+    </script>
+</body>
+</html>

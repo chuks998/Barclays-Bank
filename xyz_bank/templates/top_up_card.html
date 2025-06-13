@@ -1,0 +1,29 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Top Up Card</title>
+    
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}" sizes="32x32">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/icon/192x192.png' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <!-- ...existing head content... -->
+</head>
+<body>
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <div class="container mt-5">
+            <h1>Top Up Card</h1>
+            <p>Card Number: **** **** **** {{ card.card_number|slice:"-4:" }}</p>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="amount">Amount</label>
+                    <input type="number" class="form-control" id="amount" name="amount" placeholder="Enter amount">
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Top Up</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 el.setAttribute("data-hidden", "false");
             } else {
                 el.setAttribute("data-original", el.innerHTML);
-                el.innerHTML = "******";
+                el.innerHTML = "***";
                 el.setAttribute("data-hidden", "true");
             }
         });
@@ -125,23 +125,25 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch(getNotificationsUrl)
             .then(response => response.json())
             .then(data => {
-                document.getElementById("notification-count").innerText = data.unread_count;
-                let notificationList = document.getElementById("notification-list");
-                notificationList.innerHTML = "";
+                const notificationCount = document.getElementById("notification-count");
+                const notificationList = document.getElementById("notification-list");
 
-                if (data.notifications.length === 0) {
-                    notificationList.innerHTML = "<p class='dropdown-item'>No new notifications</p>";
-                } else {
-                    data.notifications.forEach(notif => {
-                        let item = `<a class="dropdown-item">${notif.message}</a>`;
-                        notificationList.innerHTML += item;
-                    });
+                if (notificationCount && notificationList) {
+                    // Update notification count
+                    notificationCount.innerText = data.unread_count || 0;
+
+                    // Populate notification list
+                    notificationList.innerHTML = data.notifications.length
+                        ? data.notifications.map(notif => `<a class="dropdown-item">${notif.message}</a>`).join("")
+                        : "<p class='dropdown-item'>No new notifications</p>";
                 }
-            });
+            })
+            .catch(error => console.error("Error loading notifications:", error));
     }
 
+    // Initial load and periodic refresh every 10 seconds
     loadNotifications();
-    setInterval(loadNotifications, 10000);  // Refresh every 10 seconds
+    setInterval(loadNotifications, 10000);
 });
 
 // Transfer Money Modal Handling

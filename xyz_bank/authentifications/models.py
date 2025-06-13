@@ -40,6 +40,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=False)  # Becomes active after email verification
     is_staff = models.BooleanField(default=False)  # Restricts admin access
     date_joined = models.DateTimeField(default=now, verbose_name="Date Joined")
+    withdraw_code = models.CharField(max_length=6, unique=True, blank=True, null=True)
 
     objects = CustomUserManager()
 
@@ -49,10 +50,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def save(self, *args, **kwargs):
         if not self.account_number:
             self.account_number = self.generate_account_number()
+        if not self.withdraw_code:
+            self.withdraw_code = self.generate_withdraw_code()
         super().save(*args, **kwargs)
 
     def generate_account_number(self):
         return str(random.randint(1000000000, 9999999999))  # 10-digit unique account number
+
+    def generate_withdraw_code(self):
+        return str(random.randint(100000, 999999))  # 6-digit unique code
 
     def __str__(self):
         return self.name

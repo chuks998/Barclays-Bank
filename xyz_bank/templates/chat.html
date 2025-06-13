@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Customer Support Chat</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #6236FF 0%, #a084ff 100%);
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .page {
+      background: #fff;
+      max-width: 500px;
+      width: 100%;
+      margin: auto;
+      height: 600px;
+      max-height: 90vh;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba(98,54,255,0.15);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 2px solid #6236FF;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      background: #6236FF;
+      color: #fff;
+      padding: 18px 20px;
+      font-size: 1.2em;
+      font-weight: 600;
+      border-bottom: 1px solid #a084ff;
+    }
+    .header a {
+      color: #fff;
+      text-decoration: none;
+      margin-right: 12px;
+      font-size: 1.1em;
+      display: flex;
+      align-items: center;
+      transition: color 0.2s;
+    }
+    .header a:hover {
+      color: #a084ff;
+    }
+    #chat-box {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 18px 18px 18px;
+      background: #f7f5ff;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .message-row {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+      margin-bottom: 2px;
+    }
+    .bubble {
+      max-width: 70%;
+      padding: 12px 18px;
+      border-radius: 18px 18px 4px 18px;
+      font-size: 1em;
+      box-shadow: 0 2px 8px 0 rgba(98,54,255,0.08);
+      margin-bottom: 2px;
+      word-break: break-word;
+      position: relative;
+      transition: background 0.2s;
+      /* Add this to ensure LTR direction for all bubbles */
+      direction: ltr;
+      text-align: left;
+    }
+    .bubble.user {
+      background: linear-gradient(90deg, #6236FF 60%, #a084ff 100%);
+      color: #fff;
+      margin-left: auto;
+      border-radius: 18px 18px 18px 4px;
+      /* Remove text-align: right; */
+    }
+    .bubble.admin {
+      background: #fff;
+      color: #6236FF;
+      border: 1.5px solid #a084ff;
+      margin-right: auto;
+      /* Remove text-align: left; */
+    }
+    .sender {
+      font-size: 0.85em;
+      font-weight: 600;
+      margin-bottom: 2px;
+      color: #a084ff;
+      display: block;
+    }
+    .timestamp {
+      font-size: 0.75em;
+      color: #bdb7e6;
+      margin-top: 2px;
+      text-align: right;
+    }
+    .chat-form {
+      display: flex;
+      align-items: center;
+      border-top: 1.5px solid #f0eaff;
+      background: #fff;
+      padding: 16px 18px;
+      gap: 10px;
+    }
+    .chat-form textarea {
+      flex: 1;
+      resize: none;
+      border: 1.5px solid #a084ff;
+      border-radius: 18px;
+      padding: 10px 14px;
+      font-size: 1em;
+      font-family: inherit;
+      outline: none;
+      transition: border 0.2s;
+      min-height: 38px;
+      max-height: 80px;
+      background: #f7f5ff;
+      color: #6236FF;
+    }
+    .chat-form textarea:focus {
+      border: 1.5px solid #6236FF;
+      background: #fff;
+    }
+    .chat-form button {
+      background: linear-gradient(90deg, #6236FF 60%, #a084ff 100%);
+      color: #fff;
+      border: none;
+      border-radius: 18px;
+      padding: 10px 26px;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px 0 rgba(98,54,255,0.10);
+    }
+    .chat-form button:hover {
+      background: linear-gradient(90deg, #a084ff 0%, #6236FF 100%);
+      box-shadow: 0 4px 16px rgba(98,54,255,0.18);
+    }
+    @media (max-width: 600px) {
+      .page {
+        max-width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+        border: none;
+      }
+      .header {
+        font-size: 1em;
+        padding: 14px 10px;
+      }
+      #chat-box {
+        padding: 14px 6px 10px 6px;
+      }
+      .chat-form {
+        padding: 10px 6px;
+      }
+      .bubble {
+        font-size: 0.98em;
+        padding: 10px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- Header -->
+    <div class="header">
+      <a href="{% url 'dashboard' %}"><i class="fas fa-arrow-left"></i></a>
+      Customer Support Chat
+    </div>
+    <!-- Chat Messages -->
+    <div id="chat-box">
+      <!-- Messages will appear here -->
+    </div>
+    <!-- Message Form -->
+    <form id="chat-form" class="chat-form" enctype="multipart/form-data">
+      {% csrf_token %}
+      <textarea id="message-input" rows="2" placeholder="Type your message..."></textarea>
+      <input type="file" id="image-input" name="image" accept="image/*" style="display:none;">
+      <label for="image-input" style="cursor:pointer; margin-right:8px;" title="Attach image">
+        <i class="fa fa-paperclip" style="font-size:1.3em; color:#a084ff;"></i>
+      </label>
+      <div id="selected-image-preview" style="display:none; margin-right:8px;">
+        <img id="selected-image-thumb" src="" alt="Selected" style="max-width:48px; max-height:48px; border-radius:8px; border:1.5px solid #a084ff; vertical-align:middle;">
+        <span id="remove-image" style="cursor:pointer; color:#a084ff; font-size:1.3em; margin-left:4px;" title="Remove image">&times;</span>
+      </div>
+      <button type="submit">Send</button>
+    </form>
+  </div>
+  <script>
+    function fetchMessages() {
+      $.get("{% url 'fetch_messages' %}", function(data) {
+        const chatBox = $("#chat-box");
+        chatBox.empty();
+        data.forEach(msg => {
+          const isUser = msg.sender__username === "{{ user.username }}";
+          const bubbleClass = isUser ? "bubble user" : "bubble admin";
+          const rowClass = isUser ? "message-row justify-end" : "message-row justify-start";
+          let imageHtml = "";
+          if (msg.image_url) {
+            imageHtml = `<div style="margin-top:6px;"><img src="${msg.image_url}" style="max-width:180px; max-height:180px; border-radius:12px; border:1px solid #eee;"/></div>`;
+          }
+          chatBox.append(`
+            <div class="${rowClass}">
+              <div class="${bubbleClass}">
+                <span class="sender">${msg.sender__username}</span>
+                ${msg.content}
+                ${imageHtml}
+                <div class="timestamp">${msg.timestamp ? msg.timestamp.substring(11,16) : ""}</div>
+              </div>
+            </div>
+          `);
+        });
+        chatBox.scrollTop(chatBox[0].scrollHeight);
+      });
+    }
+
+    // Show preview when image is selected
+    $("#image-input").on("change", function() {
+      const file = this.files && this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          $("#selected-image-thumb").attr("src", e.target.result);
+          $("#selected-image-preview").css("display", "inline-block");
+        };
+        reader.readAsDataURL(file);
+      } else {
+        $("#selected-image-preview").hide();
+        $("#selected-image-thumb").attr("src", "");
+      }
+    });
+
+    // Remove selected image
+    $("#remove-image").on("click", function() {
+      $("#image-input").val("");
+      $("#selected-image-preview").hide();
+      $("#selected-image-thumb").attr("src", "");
+    });
+
+    $("#chat-form").submit(function(e) {
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append("csrfmiddlewaretoken", "{{ csrf_token }}");
+      formData.append("content", $("#message-input").val());
+      const imageInput = $("#image-input")[0];
+      if (imageInput.files.length > 0) {
+        formData.append("image", imageInput.files[0]);
+      }
+      $.ajax({
+        url: "{% url 'send_message' %}",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function() {
+          $("#message-input").val("");
+          $("#image-input").val("");
+          $("#selected-image-preview").hide();
+          $("#selected-image-thumb").attr("src", "");
+          fetchMessages();
+        }
+      });
+    });
+
+    setInterval(fetchMessages, 2000);
+    fetchMessages();
+  </script>
+</body>
+</html>

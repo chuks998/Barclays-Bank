@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "authentifications",	# Add the authentifications app to the list of installed apps
     "transactions",	# Add the transactions app to the list of installed apps	
     "basic",	# Add the basic app to the list of installed apps
+    "user_support",	# Add the user_support app to the list of installed apps	
     "django.contrib.humanize",	# Add the humanize app to the list of installed apps
     "django_countries",	# Add the django_countries app to the list of installed apps
 ]

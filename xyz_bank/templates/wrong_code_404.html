@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wrong Code Identifier</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #232526 0%, #414345 100%);
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Montserrat', Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: rgba(255,255,255,0.07);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(7px);
+            -webkit-backdrop-filter: blur(7px);
+            border: 1px solid rgba(255,255,255,0.18);
+            padding: 40px 32px 32px 32px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        .icon {
+            font-size: 60px;
+            color: #ff4d4d;
+            margin-bottom: 18px;
+            animation: shake 0.7s;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translateX(-2px); }
+            20%, 80% { transform: translateX(4px); }
+            30%, 50%, 70% { transform: translateX(-8px); }
+            40%, 60% { transform: translateX(8px); }
+        }
+        .error {
+            color: #ff4d4d;
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        p {
+            color: #fff;
+            font-size: 1.1em;
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #ff4d4d 0%, #ff9966 100%);
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 32px;
+            font-size: 1em;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(255,77,77,0.15);
+            transition: background 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #ff9966 0%, #ff4d4d 100%);
+            box-shadow: 0 6px 24px rgba(255,77,77,0.25);
+        }
+        @media (max-width: 500px) {
+            .container {
+                padding: 24px 8px 20px 8px;
+            }
+            .icon {
+                font-size: 44px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="container">
+        <div class="icon">
+            <i class="bi bi-x-octagon-fill"></i>
+        </div>
+        {% if message_title %}
+            <div class="error">{{ message_title }}</div>
+        {% endif %}
+        {% if message_body %}
+            <p>{{ message_body }}</p>
+        {% endif %}
+        <a href="{% url 'dashboard' %}" class="btn-primary">Back to Dashboard</a>
+    </div>
+</body>
+</html>

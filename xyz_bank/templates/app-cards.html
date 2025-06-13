@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -10,23 +11,23 @@
     <title>Barclays Bank</title>
     <meta name="description" content="Finapp HTML Mobile Template">
     <meta name="keywords" content="bootstrap, wallet, banking, fintech mobile template, cordova, phonegap, mobile, html, responsive" />
-    <link rel="icon" type="image/png" href="assets/img/favicon.png" sizes="32x32">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/icon/192x192.png">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}" sizes="32x32">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/icon/192x192.png' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body>
 
     <!-- loader -->
     <div id="loader">
-        <img src="assets/img/loading-icon.png" alt="icon" class="loading-icon">
+        <img src="{% static 'img/loading-icon.png' %}" alt="icon" class="loading-icon">
     </div>
     <!-- * loader -->
 
     <!-- App Header -->
     <div class="appHeader">
         <div class="left">
-            <a href="#" class="headerButton goBack">
+            <a href="{% url 'dashboard' %}" class="headerButton goBack">
                 <ion-icon name="chevron-back-outline"></ion-icon>
             </a>
         </div>
@@ -34,14 +35,16 @@
             My Cards
         </div>
         <div class="right">
+            {% if cards|length < 4 %}
             <a href="#" class="headerButton" data-bs-toggle="modal" data-bs-target="#addCardActionSheet">
                 <ion-icon name="add-outline"></ion-icon>
             </a>
+            {% endif %}
         </div>
     </div>
     <!-- * App Header -->
 
-
+    {% load humanize %}
     <!-- Add Card Action Sheet -->
     <div class="modal fade action-sheet" id="addCardActionSheet" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -129,346 +132,88 @@
 
     <!-- App Capsule -->
     <div id="appCapsule">
-
         <div class="section mt-2">
-
-            <!-- card block -->
-            <div class="card-block mb-2">
+            <div class="section-heading padding">
+                <h2 class="title">My Cards</h2>
+                <a href="{% url 'create_card' %}" class="link">
+                    <ion-icon name="add-outline" role="img" class="md hydrated" aria-label="add outline"></ion-icon>
+                    Create New Card
+                </a>
+            </div>
+            {% for card in cards %}
+            <div class="card-block mb-2" style="background-color: {% cycle '#16a808' '#4a1863' '#f5ad1d' '#241e14' %};">
                 <div class="card-main">
                     <div class="card-button dropdown">
                         <button type="button" class="btn btn-link btn-icon" data-bs-toggle="dropdown">
                             <ion-icon name="ellipsis-horizontal"></ion-icon>
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">
-                                <ion-icon name="pencil-outline"></ion-icon>Edit
+                            <a class="dropdown-item" href="{% url 'dashboard_func:top_up_card' card.id %}">
+                                <ion-icon name="arrow-up-circle-outline"></ion-icon>Top Up Card
                             </a>
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="{% url 'dashboard_func:remove_card' card.id %}">
                                 <ion-icon name="close-outline"></ion-icon>Remove
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <ion-icon name="arrow-up-circle-outline"></ion-icon>Upgrade
                             </a>
                         </div>
                     </div>
                     <div class="balance">
                         <span class="label">BALANCE</span>
-                        <h1 class="title">$ 1,256,90</h1>
+                        <h1 class="title">$ {{ card.balance|floatformat:2|intcomma }}</h1>
                     </div>
                     <div class="in">
                         <div class="card-number">
                             <span class="label">Card Number</span>
-                            •••• 9905
+                            <span class="hidden-card">•••• {{ card.last_four_digits }}</span>
+                            <span class="full-card d-none">{{ card.card_number }}</span>
+                            <button class="btn btn-link text-light btn-sm toggle-card-info">
+                                <ion-icon name="eye-outline"></ion-icon>
+                            </button>
                         </div>
                         <div class="bottom">
                             <div class="card-expiry">
                                 <span class="label">Expiry</span>
-                                12 / 25
+                                {{ card.expiry_date }}
                             </div>
                             <div class="card-ccv">
                                 <span class="label">CCV</span>
-                                553
+                                {{ card.ccv }}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- * card block -->
-
-            <!-- card block -->
-            <div class="card-block bg-secondary mb-2">
-                <div class="card-main">
-                    <div class="card-button dropdown">
-                        <button type="button" class="btn btn-link btn-icon" data-bs-toggle="dropdown">
-                            <ion-icon name="ellipsis-horizontal"></ion-icon>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">
-                                <ion-icon name="pencil-outline"></ion-icon>Edit
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <ion-icon name="close-outline"></ion-icon>Remove
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <ion-icon name="arrow-up-circle-outline"></ion-icon>Upgrade
-                            </a>
-                        </div>
-                    </div>
-                    <div class="balance">
-                        <span class="label">BALANCE</span>
-                        <h1 class="title">$ 521,44</h1>
-                    </div>
-                    <div class="in">
-                        <div class="card-number">
-                            <span class="label">Card Number</span>
-                            •••• 9905
-                        </div>
-                        <div class="bottom">
-                            <div class="card-expiry">
-                                <span class="label">Expiry</span>
-                                12 / 25
-                            </div>
-                            <div class="card-ccv">
-                                <span class="label">CCV</span>
-                                553
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- * card block -->
-
-            <!-- card block -->
-            <div class="card-block bg-success mb-2">
-                <div class="card-main">
-                    <div class="card-button dropdown">
-                        <button type="button" class="btn btn-link btn-icon" data-bs-toggle="dropdown">
-                            <ion-icon name="ellipsis-horizontal"></ion-icon>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">
-                                <ion-icon name="pencil-outline"></ion-icon>Edit
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <ion-icon name="close-outline"></ion-icon>Remove
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <ion-icon name="arrow-up-circle-outline"></ion-icon>Upgrade
-                            </a>
-                        </div>
-                    </div>
-                    <div class="balance">
-                        <span class="label">BALANCE</span>
-                        <h1 class="title">$ 52,60</h1>
-                    </div>
-                    <div class="in">
-                        <div class="card-number">
-                            <span class="label">Card Number</span>
-                            •••• 9905
-                        </div>
-                        <div class="bottom">
-                            <div class="card-expiry">
-                                <span class="label">Expiry</span>
-                                12 / 25
-                            </div>
-                            <div class="card-ccv">
-                                <span class="label">CCV</span>
-                                553
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- * card block -->
-
-            <!-- card block -->
-            <div class="card-block bg-danger mb-2">
-                <div class="card-main">
-                    <div class="card-button dropdown">
-                        <button type="button" class="btn btn-link btn-icon" data-bs-toggle="dropdown">
-                            <ion-icon name="ellipsis-horizontal"></ion-icon>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">
-                                <ion-icon name="pencil-outline"></ion-icon>Edit
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <ion-icon name="close-outline"></ion-icon>Remove
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <ion-icon name="arrow-up-circle-outline"></ion-icon>Upgrade
-                            </a>
-                        </div>
-                    </div>
-                    <div class="balance">
-                        <span class="label">BALANCE</span>
-                        <h1 class="title">$ 1,256,90</h1>
-                    </div>
-                    <div class="in">
-                        <div class="card-number">
-                            <span class="label">Card Number</span>
-                            •••• 9905
-                        </div>
-                        <div class="bottom">
-                            <div class="card-expiry">
-                                <span class="label">Expiry</span>
-                                12 / 25
-                            </div>
-                            <div class="card-ccv">
-                                <span class="label">CCV</span>
-                                553
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- * card block -->
-
-            <!-- card block -->
-            <div class="card-block bg-warning mb-2">
-                <div class="card-main">
-                    <div class="card-button dropdown">
-                        <button type="button" class="btn btn-link btn-icon" data-bs-toggle="dropdown">
-                            <ion-icon name="ellipsis-horizontal"></ion-icon>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">
-                                <ion-icon name="pencil-outline"></ion-icon>Edit
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <ion-icon name="close-outline"></ion-icon>Remove
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <ion-icon name="arrow-up-circle-outline"></ion-icon>Upgrade
-                            </a>
-                        </div>
-                    </div>
-                    <div class="balance">
-                        <span class="label">BALANCE</span>
-                        <h1 class="title">$ 1,256,90</h1>
-                    </div>
-                    <div class="in">
-                        <div class="card-number">
-                            <span class="label">Card Number</span>
-                            •••• 9905
-                        </div>
-                        <div class="bottom">
-                            <div class="card-expiry">
-                                <span class="label">Expiry</span>
-                                12 / 25
-                            </div>
-                            <div class="card-ccv">
-                                <span class="label">CCV</span>
-                                553
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- * card block -->
-
-            <!-- card block -->
-            <div class="card-block bg-info mb-2">
-                <div class="card-main">
-                    <div class="card-button dropdown">
-                        <button type="button" class="btn btn-link btn-icon" data-bs-toggle="dropdown">
-                            <ion-icon name="ellipsis-horizontal"></ion-icon>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">
-                                <ion-icon name="pencil-outline"></ion-icon>Edit
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <ion-icon name="close-outline"></ion-icon>Remove
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <ion-icon name="arrow-up-circle-outline"></ion-icon>Upgrade
-                            </a>
-                        </div>
-                    </div>
-                    <div class="balance">
-                        <span class="label">BALANCE</span>
-                        <h1 class="title">$ 1,256,90</h1>
-                    </div>
-                    <div class="in">
-                        <div class="card-number">
-                            <span class="label">Card Number</span>
-                            •••• 9905
-                        </div>
-                        <div class="bottom">
-                            <div class="card-expiry">
-                                <span class="label">Expiry</span>
-                                12 / 25
-                            </div>
-                            <div class="card-ccv">
-                                <span class="label">CCV</span>
-                                553
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- * card block -->
-
-            <!-- card block -->
-            <div class="card-block bg-dark mb-2">
-                <div class="card-main">
-                    <div class="card-button dropdown">
-                        <button type="button" class="btn btn-link btn-icon" data-bs-toggle="dropdown">
-                            <ion-icon name="ellipsis-horizontal"></ion-icon>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">
-                                <ion-icon name="pencil-outline"></ion-icon>Edit
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <ion-icon name="close-outline"></ion-icon>Remove
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <ion-icon name="arrow-up-circle-outline"></ion-icon>Upgrade
-                            </a>
-                        </div>
-                    </div>
-                    <div class="balance">
-                        <span class="label">BALANCE</span>
-                        <h1 class="title">$ 1,256,90</h1>
-                    </div>
-                    <div class="in">
-                        <div class="card-number">
-                            <span class="label">Card Number</span>
-                            •••• 9905
-                        </div>
-                        <div class="bottom">
-                            <div class="card-expiry">
-                                <span class="label">Expiry</span>
-                                12 / 25
-                            </div>
-                            <div class="card-ccv">
-                                <span class="label">CCV</span>
-                                553
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- * card block -->
-
+            {% empty %}
+            <p>No cards available. <a href="{% url 'create_card' %}">Create a new card</a>.</p>
+            {% endfor %}
         </div>
-
-
     </div>
     <!-- * App Capsule -->
 
 
     <!-- App Bottom Menu -->
     <div class="appBottomMenu">
-        <a href="index-2.html" class="item">
+        <a href="{% url 'dashboard' %}" class="item">
             <div class="col">
-                <ion-icon name="pie-chart-outline"></ion-icon>
-                <strong>Overview</strong>
+                <ion-icon name="home-outline" role="img" class="md hydrated" aria-label="pie chart outline"></ion-icon>
+                <strong>Dashboard</strong>
+            </div>
+         </a>
+        <a href="{% url 'dashboard_func:transaction_history' %}" class="item">
+            <div class="col">
+                <ion-icon name="swap-horizontal-outline"></ion-icon>
+                <strong>Transactions</strong>
             </div>
         </a>
-        <a href="app-pages.html" class="item">
+        
+        <a href="#" class="item active">
             <div class="col">
-                <ion-icon name="document-text-outline"></ion-icon>
-                <strong>Pages</strong>
-            </div>
-        </a>
-        <a href="app-components.html" class="item">
-            <div class="col">
-                <ion-icon name="apps-outline"></ion-icon>
-                <strong>Components</strong>
-            </div>
-        </a>
-        <a href="app-cards.html" class="item active">
-            <div class="col">
-                <ion-icon name="card-outline"></ion-icon>
+                <ion-icon name="card-outline" role="img" class="md hydrated" aria-label="card outline"></ion-icon>
                 <strong>My Cards</strong>
             </div>
         </a>
-        <a href="app-settings.html" class="item">
+        <a href="{% url 'settings' %}" class="item">
             <div class="col">
-                <ion-icon name="settings-outline"></ion-icon>
+                <ion-icon name="settings-outline" role="img" class="md hydrated" aria-label="settings outline"></ion-icon>
                 <strong>Settings</strong>
             </div>
         </a>
@@ -478,14 +223,26 @@
 
     <!-- ========= JS Files =========  -->
     <!-- Bootstrap -->
-    <script src="assets/js/lib/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/lib/bootstrap.bundle.min.js' %}"></script>
     <!-- Ionicons -->
-    <script type="module" src="../../unpkg.com/ionicons%405.5.2/dist/ionicons/ionicons.js"></script>
+    <script type="module" crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <!-- Splide -->
-    <script src="assets/js/plugins/splide/splide.min.js"></script>
+    <script src="{% static 'js/plugins/splide/splide.min.js' %}"></script>
     <!-- Base Js File -->
-    <script src="assets/js/base.js"></script>
-
-
+    <script src="{% static 'js/base.js' %}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".toggle-card-info").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    const cardBlock = button.closest(".card-number");
+                    cardBlock.querySelector(".hidden-card").classList.toggle("d-none");
+                    cardBlock.querySelector(".full-card").classList.toggle("d-none");
+                    const icon = button.querySelector("ion-icon");
+                    icon.name = icon.name === "eye-outline" ? "eye-off-outline" : "eye-outline";
+                });
+            });
+        });
+    </script>
 </body>
 </html>

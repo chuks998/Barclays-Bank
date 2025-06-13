@@ -35,10 +35,39 @@
             Settings
         </div>
         <div class="right">
-            <a href="app-notifications.html" class="headerButton">
-                <ion-icon class="icon" name="notifications-outline"></ion-icon>
-                <span class="badge badge-danger">4</span>
-            </a>
+            <!-- notification -->
+            <a href="{% url 'dashboard_func:app_notifications' %}" class="headerButton">
+                <ion-icon class="icon md hydrated" name="notifications-outline" role="img" aria-label="notifications outline"></ion-icon>
+                <div class="notification-icon">
+                    <i class="fas fa-bell"></i> <span id="notification-count" class="badge badge-danger">0</span>
+                </div>
+                <div id="notification-list" class="dropdown-menu">
+                    <!-- Notifications will be loaded here dynamically -->
+                </div>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const notificationCountElement = document.getElementById("notification-count");
+                        const notificationListElement = document.getElementById("notification-list");
+
+                        fetch("{% url 'dashboard_func:get_notifications' %}")
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.notifications && data.notifications.length > 0) {
+                                    notificationCountElement.textContent = data.unread_count;
+                                    notificationListElement.innerHTML = data.notifications.map(notification => `
+                                        <a class="dropdown-item" href="{% url 'dashboard_func:app_notification_detail' 0 %}".replace('0', notification.id)>
+                                            ${notification.message}
+                                        </a>
+                                    `).join("");
+                                } else {
+                                    notificationCountElement.textContent = "0";
+                                    notificationListElement.innerHTML = "<span class='dropdown-item'>No notifications</span>";
+                                }
+                            })
+                            .catch(error => console.error("Error fetching notifications:", error));
+                    });
+                </script>
+                <!-- end notification -->
         </div>
     </div>
     <!-- * App Header -->
@@ -48,8 +77,8 @@
 
         <div class="section mt-3 text-center">
             <div class="avatar-section">
-                <a href="#">
-                    <img src="{{user.profile_picture.url}}" alt="avatar" class="imaged w100 rounded">
+                <img src="{{user.profile_picture.url}}" alt="avatar" class="imaged w100 rounded">
+                <a href="{% url 'change_profile_picture' %}">
                     <span class="button">
                         <ion-icon name="camera-outline"></ion-icon>
                     </span>
@@ -103,14 +132,14 @@
         <div class="listview-title mt-1">Profile Settings</div>
         <ul class="listview image-listview text inset">
             <li>
-                <a href="#" class="item">
+                <a href="{% url 'change_username' %}" class="item">
                     <div class="in">
                         <div>Change Username</div>
                     </div>
                 </a>
             </li>
             <li>
-                <a href="#" class="item">
+                <a href="{% url 'change_email' %}" class="item">
                     <div class="in">
                         <div>Update E-mail</div>
                     </div>
@@ -129,7 +158,7 @@
         <div class="listview-title mt-1">Security</div>
         <ul class="listview image-listview text mb-2 inset">
             <li>
-                <a href="#" class="item">
+                <a href="{% url 'change_password' %}" class="item">
                     <div class="in">
                         <div>Update Password</div>
                     </div>
@@ -170,7 +199,7 @@
                 <strong>Dashboard</strong>
             </div>
         </a>
-        <a href="{% url 'transaction_history' %}" class="item">
+        <a href="{% url 'dashboard_func:transaction_history' %}" class="item">
             <div class="col">
                 <ion-icon name="swap-horizontal-outline"></ion-icon>
                 <strong>Transactions</strong>

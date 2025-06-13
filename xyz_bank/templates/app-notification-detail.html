@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -10,24 +11,24 @@
     <title>Barclays Bank</title>
     <meta name="description" content="Finapp HTML Mobile Template">
     <meta name="keywords" content="bootstrap, wallet, banking, fintech mobile template, cordova, phonegap, mobile, html, responsive" />
-    <link rel="icon" type="image/png" href="assets/img/favicon.png" sizes="32x32">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/icon/192x192.png">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="manifest" href="__manifest.json">
+    
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}" sizes="32x32">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/icon/192x192.png' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body class="bg-white">
 
     <!-- loader -->
     <div id="loader">
-        <img src="assets/img/loading-icon.png" alt="icon" class="loading-icon">
+        <img src="{% static 'img/loading-icon.png' %}" alt="icon" class="loading-icon">
     </div>
     <!-- * loader -->
 
     <!-- App Header -->
     <div class="appHeader">
         <div class="left">
-            <a href="#" class="headerButton goBack">
+            <a href="{% url 'dashboard_func:app_notifications' %}" class="headerButton goBack">
                 <ion-icon name="chevron-back-outline"></ion-icon>
             </a>
         </div>
@@ -65,88 +66,40 @@
 
     <!-- App Capsule -->
     <div id="appCapsule" class="full-height">
-
         <div class="section">
-
             <div class="listed-detail mt-3">
                 <div class="icon-wrapper">
                     <div class="iconbox">
-                        <ion-icon name="arrow-down-outline"></ion-icon>
+                        <ion-icon name="notifications-outline"></ion-icon>
                     </div>
                 </div>
-                <h3 class="text-center mt-2">Payment Received</h3>
+                <h3 class="text-center mt-2">Notification</h3>
             </div>
-
             <ul class="listview simple-listview no-space mt-3">
                 <li>
-                    <span>From</span>
-                    <strong>John Doe</strong>
-                </li>
-                <li>
-                    <span>Bank Name</span>
-                    <strong>Envato Bank</strong>
+                    <span>Message</span>
+                    <strong>{{ notification.message }}</strong>
                 </li>
                 <li>
                     <span>Date</span>
-                    <strong>Sep 25, 2020 10:45 AM</strong>
-                </li>
-                <li>
-                    <span>Amount</span>
-                    <strong>$ 50</strong>
+                    <strong>{{ notification.created_at|date:"M d, Y h:i A" }}</strong>
                 </li>
             </ul>
-
-
         </div>
-
     </div>
     <!-- * App Capsule -->
-
-    <!-- App Bottom Menu -->
-    <div class="appBottomMenu">
-        <a href="index-2.html" class="item">
-            <div class="col">
-                <ion-icon name="pie-chart-outline"></ion-icon>
-                <strong>Overview</strong>
-            </div>
-        </a>
-        <a href="app-pages.html" class="item">
-            <div class="col">
-                <ion-icon name="document-text-outline"></ion-icon>
-                <strong>Pages</strong>
-            </div>
-        </a>
-        <a href="app-components.html" class="item">
-            <div class="col">
-                <ion-icon name="apps-outline"></ion-icon>
-                <strong>Components</strong>
-            </div>
-        </a>
-        <a href="app-cards.html" class="item">
-            <div class="col">
-                <ion-icon name="card-outline"></ion-icon>
-                <strong>My Cards</strong>
-            </div>
-        </a>
-        <a href="app-settings.html" class="item">
-            <div class="col">
-                <ion-icon name="settings-outline"></ion-icon>
-                <strong>Settings</strong>
-            </div>
-        </a>
-    </div>
-    <!-- * App Bottom Menu -->
 
 
     <!-- ========= JS Files =========  -->
     <!-- Bootstrap -->
-    <script src="assets/js/lib/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/lib/bootstrap.bundle.min.js' %}"></script>
     <!-- Ionicons -->
-    <script type="module" src="../../unpkg.com/ionicons%405.5.2/dist/ionicons/ionicons.js"></script>
+    <script type="module" crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <!-- Splide -->
-    <script src="assets/js/plugins/splide/splide.min.js"></script>
+    <script src="{% static 'js/plugins/splide/splide.min.js' %}"></script>
     <!-- Base Js File -->
-    <script src="assets/js/base.js"></script>
+    <script src="{% static 'js/base.js' %}"></script>
 
 
 </body>

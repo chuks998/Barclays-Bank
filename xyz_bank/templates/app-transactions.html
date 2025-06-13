@@ -51,7 +51,7 @@
                 {% for group in grouped_transactions %}
                     <h4 class="text-muted">{{ group.grouper }}</h4>
                     {% for transaction in group.list %}
-                        <a href="{% url 'transaction_detail' transaction.id %}" class="item">
+                        <a href="{% url 'dashboard_func:transaction_detail' transaction.id %}" class="item">
                             <div class="detail">
                                 {% if transaction.transaction_type == "Transfer" %}
                                     {% if transaction.sender == request.user %}
@@ -111,7 +111,7 @@
                 <strong>Dashboard</strong>
             </div>
         </a>
-        <a href="{% url 'transaction_history' %}" class="item active">
+        <a href="{% url 'dashboard_func:transaction_history' %}" class="item active">
             <div class="col">
                 <ion-icon name="swap-horizontal-outline"></ion-icon>
                 <strong>Transactions</strong>

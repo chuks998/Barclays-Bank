@@ -104,6 +104,10 @@
                                 <label class="label" for="password1">Password</label>
                                 <input type="password" class="form-control" id="password1" name="password" autocomplete="off"
                                     placeholder="Your password" required>
+                                <small style="color: #6c757d; font-size: 0.9em; font-style: italic;">
+                                    Password must be at least 8 characters, include uppercase, lowercase, a number, and a symbol (e.g., 1234Abc%).
+                                </small>
+                                <div id="password-strength" style="height: 5px; background-color: lightgray; margin-top: 5px;"></div>
                                 <i class="clear-input">
                                     <ion-icon name="close-circle"></ion-icon>
                                 </i>
@@ -115,6 +119,7 @@
                                 <label class="label" for="password2">Password Again</label>
                                 <input type="password" class="form-control" id="password2" name="password2" autocomplete="off"
                                     placeholder="Type password again" required>
+                                <small id="password-match-status" style="color: red; font-size: 0.9em; display: none;">Passwords do not match</small>
                                 <i class="clear-input">
                                     <ion-icon name="close-circle"></ion-icon>
                                 </i>
@@ -194,7 +199,55 @@
     <script src="{% static 'js/plugins/splide/splide.min.js' %}"></script>
     <!-- Base Js File -->
     <script src="{% static 'js/base.js' %}"></script>
+    <script>
+        const password1 = document.getElementById('password1');
+        const password2 = document.getElementById('password2');
+        const passwordStrength = document.getElementById('password-strength');
+        const passwordMatchStatus = document.getElementById('password-match-status');
 
+        password1.addEventListener('input', () => {
+            const value = password1.value;
+            let strength = 0;
+
+            if (value.length >= 8) strength++;
+            if (/[A-Z]/.test(value)) strength++;
+            if (/[a-z]/.test(value)) strength++;
+            if (/\d/.test(value)) strength++;
+            if (/[!@#$%^&*(),.?":{}|<>]/.test(value)) strength++; // Check for symbols
+
+            switch (strength) {
+                case 1:
+                    passwordStrength.style.backgroundColor = 'red';
+                    break;
+                case 2:
+                    passwordStrength.style.backgroundColor = 'orange';
+                    break;
+                case 3:
+                    passwordStrength.style.backgroundColor = 'yellow';
+                    break;
+                case 4:
+                    passwordStrength.style.backgroundColor = 'yellow';
+                    break;
+                case 5:
+                    passwordStrength.style.backgroundColor = 'green';
+                    break;
+                default:
+                    passwordStrength.style.backgroundColor = 'lightgray';
+            }
+        });
+
+        password2.addEventListener('input', () => {
+            if (password2.value === password1.value) {
+                passwordMatchStatus.style.color = 'green';
+                passwordMatchStatus.textContent = 'Passwords match';
+                passwordMatchStatus.style.display = 'block';
+            } else {
+                passwordMatchStatus.style.color = 'red';
+                passwordMatchStatus.textContent = 'Passwords do not match';
+                passwordMatchStatus.style.display = 'block';
+            }
+        });
+    </script>
 
 </body>
 </html>
